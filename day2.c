@@ -12,39 +12,24 @@ int at[6]={2,4,4,5,99,0};
 // after ever opcode instruction move 4 from current opcode
 //
 int * current = at;
-int get_opcode(int *ptr)
+//                  op type  val1   val2   write_to
+int opcode_operation(int* a, int* b, int*c, int*d)
 {
-        if(*ptr == 1)
+        //check value of op type
+        if(*a == 1)
         {
-                return 1;
+            int res = *b + *c;
+            at[*d] = res;
+            return res;
         }
-        else if(*ptr == 2)
+        if(*a == 2)
         {
-                return 2;
-        }
-        else if(*ptr == 99)
-        {
-                return 99;
-        }
-        else{
-                perror("unknown opcode!\n");
-                exit(-1);
+            int res = *b * *c;
+            at[*d] = res;
+                return res;
         }
 }
-int opcode_add(int read_pos_one, int read_pos_two, int write_pos)
-{
-        int a = arr[read_pos_one];
-        int b = arr[read_pos_two];
-        arr[write_pos] = a + b;
-        return a+b;
-}
-int opcode_multiply(int read_pos_one, int read_pos_two, int write_pos)
-{
-        int a = arr[read_pos_one];
-        int b = arr[read_pos_two];
-        arr[write_pos] = a * b;
-        return a * b;
-}
+       
 int* move_to_next_opcode(int *ptr)
 {
         return ptr+4;
@@ -52,32 +37,8 @@ int* move_to_next_opcode(int *ptr)
 
 int main()
 {
-        printf("current = %d\n", *current);
-        printf("plus 4 = %d\n", *(current+4));
-        int r = 0;
-        int last_op = 0;
-        while(1)
-        {
-
-                r = get_opcode(current);
-
-                switch(r)
-                {
-                        case 1:
-                                last_op = opcode_add(*(current+1), *(current+2), *(current+3));
-                                break;
-                        case 2:
-                                last_op = opcode_multiply(*(current+1), *(current+2), *(current+3));
-                                break;
-                        case 99:
-                                break;
-                }
-                if(*current == 99)
-                {
-                        printf("Last value = %d\n", last_op);
-                        break;
-                }
-                current = move_to_next_opcode(current);
-
-        }
+        printf("%d\n", at[5]); 
+        int r = opcode_operation(current,current+1,current+2,current+3);
+        printf("%d\n", r);
+        printf("%d\n", at[5]); 
 }
